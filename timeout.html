@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="jquery-1.10.1.min.js"></script>
+<script>
+	$(document).ready( function(){
+		$("#goback").click( function(){
+			history.go(-1);
+			return false;
+		});
+	});	
+</script>
+<style>
+.WatcherDialog {
+	margin-left:auto;
+	margin-right:auto;
+	background-color: #cccccc;
+	border-style: groove;
+	border-width: 3px;
+	border-color: #888888;
+	padding: 10px;
+	width: 600px;
+	height: 350px;
+	text-align: center;
+}
+a {
+	text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+<div class="WatcherDialog"> 
+	 <h1 style="font-size: 2.5em;">You have spent you time on Facebook for too long!</h1> 
+	 <p style="font-size: 1.5em;"> Why not take a break and do something good? </p> 
+	 
+	 <a href="#" id="goback" onclick="window.history.go(-2); return false;">Please, just a little bit more.</a>
+</div>
+</body>
+
+</html>
