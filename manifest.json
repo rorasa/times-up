@@ -1,0 +1,27 @@
+{
+  "name": "Facebook Watcher",
+  "version": "0.1",
+  "description": "Stop you from spending too much time on Facebook!",
+  "background": { 
+     "scripts": ["eventPage.js"], 
+     "persistent": false
+  },
+  "page_action" :
+  {
+    "default_icon" : "icon-19.png",
+    "default_title" : "Facebook Watcher",
+    "default_popup": "popup.html"
+  },
+  "permissions" : [
+    "tabs",
+    "webNavigation",
+    "storage",
+    "alarms",
+    "*://*.facebook.com/*"
+  ],
+  "icons" : {
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+  },
+  "manifest_version": 2
+}
