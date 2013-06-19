@@ -4,7 +4,6 @@ $(document).ready(function(){
     
     var currentTime = Time.getTime();
     var currentSession;
-    //$("#time").text(Time.getTime());
     
     chrome.storage.local.get({
        'SessionStartTime': {},
@@ -17,7 +16,4 @@ $(document).ready(function(){
          var alarmFired = storage.AlarmFired;
          $("#alarm").text(alarmFired);
        });
-       
-    //var currentSession = currentTime-startTime;
-    //$("#time").text(startTime);
 });

@@ -1,10 +1,11 @@
 {
+  "manifest_version": 2,
   "name": "Facebook Watcher",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Stop you from spending too much time on Facebook!",
   "background": { 
-     "scripts": ["eventPage.js"], 
-     "persistent": false
+     "scripts": ["background.js"], 
+     "persistent": true
   },
   "page_action" :
   {
@@ -17,11 +18,9 @@
     "webNavigation",
     "storage",
     "alarms",
-    "*://*.facebook.com/*"
   ],
   "icons" : {
     "48" : "icon-48.png",
     "128" : "icon-128.png"
-  },
-  "manifest_version": 2
+  }
 }
