@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="jquery-1.10.1.min.js"></script>
+<script src="options.js"></script>
+</head>
+
+<body>
+<h1> Facebook Watcher options </h1>
+
+<h2> Notifications </h2>
+ 
+ <form>
+ 
+ <input type="checkbox" id="EnableNotification" value="enable"> <b>Enable Notification</b>
+ 
+ How ofter? : 
+ <select id="NtfTime">
+  <option id="Ntf5mins"  value="5mins">5 minutes</option>
+  <option id="Ntf10mins" value="10mins">10 minutes</option>
+  <option id="Ntf20mins" value="20mins">20 minutes</option>
+  <option id="Ntf30mins" value="30mins" selected>30 minutes</option>
+  <option id="Ntf45mins" value="45mins">45 minutes</option>
+  <option id="Ntf1hours" value="1hours">1 hours</option>
+  <option id="Ntf2hours" value="2hours">2 hours</option>
+  <option id="Ntf3hours" value="3hours">3 hours</option>
+</select>
+ 
+ </form>
+ 
+<h2> Force Stop! </h2>
+
+<form>
+<input type="checkbox" id="EnableForceStop" value="enable"> <b>Enable Force Stop!</b>
+
+<div id="forceStopOptions">
+<h3> Max continuous period </h3>
+Specify how long can you Facebook in a single instance: <input type="input" id="MaxCon"> minutes
+<h3> Max hours per day </h3>
+Specify how many hours per day you allow for Facebook: <input type="input" id="MaxPerDay"> hours
+<h3> Max minutes per hour </h3>
+Specify how many minutes you allow for Facebook in an hour: <input type="input" id="MaxPerHour"> minutes
+<h3> Max opening per hour </h3>
+Specify maximum number of time you open up Facebook in an hour: <input type="input" id="MaxOpen"> times 
+
+<p>
+<input type="checkbox" id="EnableForceStopWarning" value="enable"> <b>Warn before force stop.</b>
+</p>
+</div>
+</form>
+
+<h2> Parental control </h2>
+
+Yet to available
+
+<h2> Usage record </h2>
+
+<button id="ResetButton"> Reset all record </button>
+
+<div id="console"></div>
+</body>
+
+</html>
