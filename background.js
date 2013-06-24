@@ -32,6 +32,9 @@ function checkForValidUrl(tabId, changeInfo, tab) {
   			}
   		}else{
 	  		console.log("Already registered");
+	  		if (tab.url.indexOf('www.facebook.com') > -1) {
+	  			chrome.pageAction.show(tabId);
+	  		}
   		}
   	}
   );
@@ -103,12 +106,11 @@ function watcherTimer(alarm) {
 	         	console.log("Force Stop enabled");
 	         	
 	         	// If OptionMaxCon is enabled
-	         	if( storage.Options.OptionMaxCon > 0){
+	         	if( storage.Options.OptionMaxCon > 4){
 	         		if( currentSession >= storage.Options.OptionMaxCon * 60){
 	         			chrome.tabs.update(storage.TabId, {url:"timeout.html"});
 	         			chrome.alarms.clearAll();
-	         		}
-	         			
+	         		}			
 	         	}
 	         	
     	    }

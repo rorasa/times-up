@@ -4,11 +4,19 @@ $(document).ready(function(){
 
 	//Initialiser
 	$("#forceStopOptions").hide();
+	$("#notificationOptions").hide();
 	
 	restore_options();
   	
   	// Event listeners
-  	$("#EnableNotification").change(save_options);
+  	$("#EnableNotification").change(function(){
+  		save_options();
+  		if( $("#EnableNotification").prop('checked') ){
+  			$("#notificationOptions").show();
+  		}else{
+  			$("#notificationOptions").hide();
+  		}
+  	});
   	$("#NtfTime").change(save_options);
   	$("#EnableForceStop").change(function(){
   		save_options();
@@ -18,12 +26,69 @@ $(document).ready(function(){
     		$("#forceStopOptions").hide();
 		}
   	});
-  	$("#MaxCon").change(save_options);
-  	$("#MaxPerDay").change(save_options);
-  	$("#MaxPerHour").change(save_options);
-  	$("#MaxOpen").change(save_options);
+  	$("#MaxCon").change(function(){
+  		save_options();
+  		if($("#MaxCon").val()>4){
+  			$("#MaxConDisplay").text($("#MaxCon").val()+" minutes");
+  		}else{
+  			$("#MaxConDisplay").text("Disabled");
+  		}
+  	});
+  	$("#MaxConAsk").mouseenter(function(){
+  		$("#MaxConHelp").show();
+  	});
+  	$("#MaxConAsk").mouseleave(function(){
+  		$("#MaxConHelp").hide();
+  	});
+  	$("#MaxPerDay").change(function(){
+  		save_options();
+  		if($("#MaxPerDay").val()>0){
+  			$("#MaxPerDayDisplay").text($("#MaxPerDay").val()+" hours");
+  		}else{
+  			$("#MaxPerDayDisplay").text("Disabled");
+  		}
+  	});
+  	$("#MaxPerDayAsk").mouseenter(function(){
+  		$("#MaxPerDayHelp").show();
+  	});
+  	$("#MaxPerDayAsk").mouseleave(function(){
+  		$("#MaxPerDayHelp").hide();
+  	});
+  	$("#MaxPerHour").change(function(){
+  		save_options();
+  		if($("#MaxPerHour").val()>0){
+  			$("#MaxPerHourDisplay").text($("#MaxPerHour").val()+" minutes");
+  		}else{
+  			$("#MaxPerHourDisplay").text("Disabled");
+  		}
+  	});
+	$("#MaxPerHourAsk").mouseenter(function(){
+  		$("#MaxPerHourHelp").show();
+  	});
+  	$("#MaxPerHourAsk").mouseleave(function(){
+  		$("#MaxPerHourHelp").hide();
+  	});
+  	$("#MaxOpen").change(function(){
+  		save_options();
+  		if($("#MaxOpen").val()>0){
+  			$("#MaxOpenDisplay").text($("#MaxOpen").val()+" times");
+  		}else{
+  			$("#MaxOpenDisplay").text("Disabled");
+  		}
+  	});
+  	$("#MaxOpenAsk").mouseenter(function(){
+  		$("#MaxOpenHelp").show();
+  	});
+  	$("#MaxOpenAsk").mouseleave(function(){
+  		$("#MaxOpenHelp").hide();
+  	});
+  	
   	$("#EnableForceStopWarning").change(save_options);
   	$("#ResetButton").click(clear_data);
+  	
+  	$("#testRange").change(function(){
+  		$("#testDisplay").text($("#testRange").val());
+  	});
   	
 });
 
@@ -92,11 +157,17 @@ function restore_options() {
        'Options': {} },
        function(storage) {
        
-       	 // check if there is OptionNtf set ...
+         // check if there is OptionNtf set ...
          if(storage.Options.hasOwnProperty("OptionNtf")){
-         	$('#EnableNotification').prop('checked',storage.Options.OptionNtf); 	
-         }else{  // ... else default is true
-         	$('#EnableNotification').prop("checked", true);
+         	$("#EnableNotification").prop('checked',storage.Options.OptionNtf);
+         	if (storage.Options.OptionNtf){
+         		$("#notificationOptions").show();
+         	}else{
+         		$("#notificationOptions").hide();
+         	}
+         }else{ // ... else default is true
+         	$("#EnableNotification").prop('checked',true);
+         	$("#notificationOptions").show();
          }
          
          // check if there is OptionNtfTime set ...
@@ -137,31 +208,55 @@ function restore_options() {
          // check if there is OptionMaxCon set ...
          if(storage.Options.hasOwnProperty("OptionMaxCon")){
          	$("#MaxCon").val(storage.Options.OptionMaxCon);
-         }else{ // ... else default is -1
-         	$("#MaxCon").val(-1);
+         	if(storage.Options.OptionMaxCon>4){
+         		$("#MaxConDisplay").text($("#MaxCon").val()+" minutes"  );
+         	}else{
+         		$("#MaxConDisplay").text("Disabled");
+         	}         	
+         }else{ // ... else default is 4
+         	$("#MaxCon").val(4);
+         	$("#MaxConDisplay").text("Disabled");
          }
          
          // check if there is OptionMaxPerDay set ...
          if(storage.Options.hasOwnProperty("OptionMaxPerDay")){
          	$("#MaxPerDay").val(storage.Options.OptionMaxPerDay);
-         }else{ // ... else default is -1
-         	$("#MaxPerDay").val(-1);
+         	if(storage.Options.OptionMaxPerDay>0){
+         		$("#MaxPerDayDisplay").text($("#MaxPerDay").val()+" hours"  );
+         	}else{
+         		$("#MaxPerDayDisplay").text("Disabled");
+         	}         	
+         }else{ // ... else default is 0
+         	$("#MaxPerDay").val(0);
+         	$("#MaxPerDayDisplay").text("Disabled");
          }
          
          // check if there is OptionMaxPerHour set ...
          if(storage.Options.hasOwnProperty("OptionMaxPerHour")){
          	$("#MaxPerHour").val(storage.Options.OptionMaxPerHour);
-         }else{ // ... else default is -1
-         	$("#MaxPerHour").val(-1);
+         	if(storage.Options.OptionMaxPerHour>0){
+         		$("#MaxPerHourDisplay").text($("#MaxPerHour").val()+" hours"  );
+         	}else{
+         		$("#MaxPerHourDisplay").text("Disabled");
+         	}         	
+         }else{ // ... else default is 0
+         	$("#MaxPerHour").val(0);
+         	$("#MaxPerHourDisplay").text("Disabled");
          }
          
          // check if there is OptionMaxOpen set ...
          if(storage.Options.hasOwnProperty("OptionMaxOpen")){
          	$("#MaxOpen").val(storage.Options.OptionMaxOpen);
-         }else{ // ... else default is -1
-         	$("#MaxOpen").val(-1);
+         	if(storage.Options.OptionMaxOpen>0){
+         		$("#MaxOpenDisplay").text($("#MaxOpen").val()+" hours"  );
+         	}else{
+         		$("#MaxOpenDisplay").text("Disabled");
+         	}         	
+         }else{ // ... else default is 0
+         	$("#MaxOpen").val(0);
+         	$("#MaxOpenDisplay").text("Disabled");
          }
-         
+                 
          // check if there is OptionFSWarning set ...
          if(storage.Options.hasOwnProperty("OptionFSWarning")){
          	$('#EnableForceStopWarning').prop('checked',storage.Options.OptionFSWarning); 	
@@ -175,7 +270,11 @@ function restore_options() {
 
 // reset all local storage content
 function clear_data(){
-	chrome.storage.local.clear(function(){
-		$('#console').text("clear all data");
-	});	
+
+	var confirm = window.confirm("Your entire usage records and all setting will be reset.\n Are you sure about this?");
+	if (confirm){
+		chrome.storage.local.clear(function(){
+			$('#console').text("clear all data");
+			});
+	}	
 }

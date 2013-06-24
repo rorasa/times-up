@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Facebook Watcher",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Stop you from spending too much time on Facebook!",
   "background": { 
      "scripts": ["background.js"], 

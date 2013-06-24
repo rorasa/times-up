@@ -13,7 +13,7 @@ $(document).ready(function(){
          currentSession = (currentTime-startTime)/1000;
          $("#time").text(currentSession+" seconds");
          
-         var alarmFired = storage.AlarmFired;
-         $("#alarm").text(alarmFired);
+         //var alarmFired = storage.AlarmFired;
+         //$("#alarm").text(alarmFired);
        });
 });
