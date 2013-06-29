@@ -72,7 +72,7 @@ function record(){
 				chrome.storage.local.set({Options: options}, function(){});
 			}else{
 				var data = {};
-				data[key] = $("#"+key).val();
+				data[key] = parseInt($("#"+key).val());
 				chrome.storage.local.set(data, function(){});
 			}						
 		} 

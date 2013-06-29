@@ -7,10 +7,11 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 
   console.log("New tab");
   // check if tab is already registered
-  chrome.storage.local.get({
-  	'TabId': {} },
-  	function(localId) {
-  		if (localId.TabId != tabId){
+  chrome.storage.local.get(
+  	null,
+  	function(storage) {
+  		 	
+  		if (storage.TabId != tabId){
   			// If the url contains 'facebook' is found :
   			if (tab.url.indexOf('www.facebook.com') > -1) {
   				// ... show the page action.
@@ -24,16 +25,71 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     			chrome.storage.local.set({ AlarmFired: 0}, function() {});
     			//chrome.storage.local.set({ InitFlag: true}, function() {});
     			console.log("tabId = "+tabId);
+    			
+    			// ... and increase the number of time opening a facebook
+    			if(storage.hasOwnProperty("OpenThisHour")){
+    				//console.log("Last reset: "+storage.LastHour+" current time: "+Time.getHours());
+    				
+    				if( storage.LastHour == Time.getHours() ){
+    					chrome.storage.local.set({ OpenThisHour: storage.OpenThisHour+1}, function(){});
+    				}else{
+    					chrome.storage.local.set({ OpenThisHour: 1}, function(){});
+    					chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
+    				}
+    			}else{
+    				chrome.storage.local.set({ OpenThisHour: 1}, function(){});
+    				chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
+    				//console.log("Set OpenThisHour to 1 at "+Time.getHours());
+    			}
+    			//chrome.storage.local.set({ OpenPerHour: }, function(){});
     
 				// ... and create an alarm to check the time in future.
 				chrome.alarms.clearAll();
 				//chrome.alarms.create("WatcherTimer",{ periodInMinutes: 0.1 });		// Development rate
 				chrome.alarms.create("WatcherTimer",{ periodInMinutes: 5 });		// Deployment rate
+				
+				
+				// Check usage limit and Force Stop
+  				if(storage.Options.hasOwnProperty("OptionFS")){
+         			if(storage.Options.OptionFS){
+	         			// If OptionMaxOpen is enabled
+	         			if( storage.Options.OptionMaxOpen > 0){
+	         			
+	         				if( storage.LastHour == Time.getHours() ){
+	         					if( storage.OpenThisHour > storage.Options.OptionMaxOpen){
+	         						chrome.tabs.update(storage.TabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}
+	         				}else{ // reset count if necessary
+	         			
+	         				}					
+	         			}
+    	    		}
+		         }// ... else disable Force Stop by default
   			}
   		}else{
 	  		console.log("Already registered");
 	  		if (tab.url.indexOf('www.facebook.com') > -1) {
 	  			chrome.pageAction.show(tabId);
+	  			
+	  			var Time = new Date();
+	  			// Check usage limit and Force Stop
+  				if(storage.Options.hasOwnProperty("OptionFS")){
+         			if(storage.Options.OptionFS){
+	         			// If OptionMaxOpen is enabled
+	         			if( storage.Options.OptionMaxOpen > 0){
+	         				
+	         				if( storage.LastHour == Time.getHours() ){
+	         					if( storage.OpenThisHour > storage.Options.OptionMaxOpen){
+	         						chrome.tabs.update(storage.TabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}
+	         				}else{ // reset count if necessary
+	         			
+	         				}					
+	         			}
+    	    		}
+		         }// ... else disable Force Stop by default
 	  		}
   		}
   	}
