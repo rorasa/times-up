@@ -41,7 +41,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     				chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
     				//console.log("Set OpenThisHour to 1 at "+Time.getHours());
     			}
-    			//chrome.storage.local.set({ OpenPerHour: }, function(){});
+    			
     
 				// ... and create an alarm to check the time in future.
 				chrome.alarms.clearAll();
@@ -52,18 +52,28 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 				// Check usage limit and Force Stop
   				if(storage.Options.hasOwnProperty("OptionFS")){
          			if(storage.Options.OptionFS){
+         			
 	         			// If OptionMaxOpen is enabled
-	         			if( storage.Options.OptionMaxOpen > 0){
-	         			
+	         			if( storage.Options.OptionMaxOpen > 0){	         			
 	         				if( storage.LastHour == Time.getHours() ){
 	         					if( storage.OpenThisHour > storage.Options.OptionMaxOpen){
-	         						chrome.tabs.update(storage.TabId, {url:"timeout.html"});
+	         						chrome.tabs.update(tabId, {url:"timeout.html"});
 	         						chrome.alarms.clearAll();
 	         					}
-	         				}else{ // reset count if necessary
-	         			
-	         				}					
+	         				}				
 	         			}
+	         			// If OptionMaxPerHour is enabled
+	         			console.log(storage.Options.OptionMaxPerHour);
+	         			if( storage.Options.OptionMaxPerHour > 0){
+	         				if( storage.LastHour == Time.getHours() ){
+	         					console.log(storage.TimeThisHour);
+	         					if( storage.TimeThisHour > storage.Options.OptionMaxPerHour){
+	         						chrome.tabs.update(tabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}	
+	         				}		
+	         			}
+	         			
     	    		}
 		         }// ... else disable Force Stop by default
   			}
@@ -77,16 +87,24 @@ function checkForValidUrl(tabId, changeInfo, tab) {
   				if(storage.Options.hasOwnProperty("OptionFS")){
          			if(storage.Options.OptionFS){
 	         			// If OptionMaxOpen is enabled
-	         			if( storage.Options.OptionMaxOpen > 0){
-	         				
+	         			if( storage.Options.OptionMaxOpen > 0){	         				
 	         				if( storage.LastHour == Time.getHours() ){
 	         					if( storage.OpenThisHour > storage.Options.OptionMaxOpen){
 	         						chrome.tabs.update(storage.TabId, {url:"timeout.html"});
 	         						chrome.alarms.clearAll();
 	         					}
-	         				}else{ // reset count if necessary
-	         			
-	         				}					
+	         				}				
+	         			}
+	         			// If OptionMaxPerHour is enabled
+	         			console.log(storage.Options.OptionMaxPerHour);
+	         			if( storage.Options.OptionMaxPerHour > 0){
+	         				if( storage.LastHour == Time.getHours() ){
+	         					console.log(storage.TimeThisHour);
+	         					if( storage.TimeThisHour > storage.Options.OptionMaxPerHour){
+	         						chrome.tabs.update(tabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}	
+	         				}		
 	         			}
     	    		}
 		         }// ... else disable Force Stop by default
@@ -118,23 +136,31 @@ function tabClose(tabId, removeInfo){
 // main alarm for timer check
 function watcherTimer(alarm) {
 	console.log("alarm fired: watcherTimer");
-	chrome.storage.local.get({
-	   'TabId': {},
-       'AlarmFired': {},
-       'SessionStartTime': {},
-       'SessionUsageTime': {},
-       'Options': {} },
+	chrome.storage.local.get(
+	   null,
        function(storage) {
          var alarmFired = storage.AlarmFired;
          chrome.storage.local.set({ AlarmFired: alarmFired+1}, function() {});
          
+         var Time = new Date();
          var currentTime = Date.now();
          var currentSession = (currentTime-storage.SessionStartTime)/1000;
          //var usageTime = storage.SessionUsageTime + 6;  	// Development rate
          var usageTime = storage.SessionUsageTime + 300;  	// Deployment rate
 		 chrome.storage.local.set({ SessionUsageTime: usageTime}, function() {});
 
-         //console.log(currentSession);
+		// record time spent on facebook
+    	if(storage.hasOwnProperty("TimeThisHour")){
+    		if( storage.LastHour == Time.getHours() ){
+    			chrome.storage.local.set({ TimeThisHour: storage.TimeThisHour+5}, function(){});
+    		}else{
+    			chrome.storage.local.set({ TimeThisHour: 0}, function(){});
+    			chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
+    		}
+    	}else{
+    		chrome.storage.local.set({ TimeThisHour: 5}, function(){});
+    	}
+
          
          // If OptionNtf is set...
          if(!storage.Options.hasOwnProperty("OptionNtf" ) || storage.Options.OptionNtf){
@@ -164,6 +190,14 @@ function watcherTimer(alarm) {
 	         	// If OptionMaxCon is enabled
 	         	if( storage.Options.OptionMaxCon > 4){
 	         		if( currentSession >= storage.Options.OptionMaxCon * 60){
+	         			chrome.tabs.update(storage.TabId, {url:"timeout.html"});
+	         			chrome.alarms.clearAll();
+	         		}			
+	         	}
+	         	
+	         	// If OptionMaxPerHour is enabled
+	         	if( storage.Options.OptionMaxPerHour > 0){
+	         		if( storage.TimeThisHour > storage.Options.OptionMaxPerHour){
 	         			chrome.tabs.update(storage.TabId, {url:"timeout.html"});
 	         			chrome.alarms.clearAll();
 	         		}			

@@ -235,7 +235,7 @@ function restore_options() {
          if(storage.Options.hasOwnProperty("OptionMaxPerHour")){
          	$("#MaxPerHour").val(storage.Options.OptionMaxPerHour);
          	if(storage.Options.OptionMaxPerHour>0){
-         		$("#MaxPerHourDisplay").text($("#MaxPerHour").val()+" hours"  );
+         		$("#MaxPerHourDisplay").text($("#MaxPerHour").val()+" minutes"  );
          	}else{
          		$("#MaxPerHourDisplay").text("Disabled");
          	}         	
@@ -248,7 +248,7 @@ function restore_options() {
          if(storage.Options.hasOwnProperty("OptionMaxOpen")){
          	$("#MaxOpen").val(storage.Options.OptionMaxOpen);
          	if(storage.Options.OptionMaxOpen>0){
-         		$("#MaxOpenDisplay").text($("#MaxOpen").val()+" hours"  );
+         		$("#MaxOpenDisplay").text($("#MaxOpen").val()+" times"  );
          	}else{
          		$("#MaxOpenDisplay").text("Disabled");
          	}         	
