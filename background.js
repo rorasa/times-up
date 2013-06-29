@@ -42,6 +42,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     			if(storage.hasOwnProperty("LastDay")){
     				if( storage.LastDay != Time.getDate()){
     					chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
+    					chrome.storage.local.set({ TimeThisDay: 0}, function(){});
     				}    				
     			}else{
     				chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
