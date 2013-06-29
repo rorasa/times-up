@@ -28,8 +28,6 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     			
     			// ... and increase the number of time opening a facebook
     			if(storage.hasOwnProperty("OpenThisHour")){
-    				//console.log("Last reset: "+storage.LastHour+" current time: "+Time.getHours());
-    				
     				if( storage.LastHour == Time.getHours() ){
     					chrome.storage.local.set({ OpenThisHour: storage.OpenThisHour+1}, function(){});
     				}else{
@@ -39,7 +37,14 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     			}else{
     				chrome.storage.local.set({ OpenThisHour: 1}, function(){});
     				chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
-    				//console.log("Set OpenThisHour to 1 at "+Time.getHours());
+    			}
+    			
+    			if(storage.hasOwnProperty("LastDay")){
+    				if( storage.LastDay != Time.getDate()){
+    					chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
+    				}    				
+    			}else{
+    				chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
     			}
     			
     
@@ -63,15 +68,22 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	         				}				
 	         			}
 	         			// If OptionMaxPerHour is enabled
-	         			console.log(storage.Options.OptionMaxPerHour);
 	         			if( storage.Options.OptionMaxPerHour > 0){
 	         				if( storage.LastHour == Time.getHours() ){
-	         					console.log(storage.TimeThisHour);
 	         					if( storage.TimeThisHour > storage.Options.OptionMaxPerHour){
 	         						chrome.tabs.update(tabId, {url:"timeout.html"});
 	         						chrome.alarms.clearAll();
 	         					}	
 	         				}		
+	         			}
+	         			// If OptionMaxPerDay is enabled
+	         			if( storage.Options.OptionMaxPerDay > 0){
+	         				if( storage.LastDay == Time.getDate() ){
+	         					if( storage.TimeThisDay > storage.Options.OptionMaxPerDay*60){
+	         						chrome.tabs.update(tabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}	
+	         				}
 	         			}
 	         			
     	    		}
@@ -96,16 +108,24 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	         				}				
 	         			}
 	         			// If OptionMaxPerHour is enabled
-	         			console.log(storage.Options.OptionMaxPerHour);
 	         			if( storage.Options.OptionMaxPerHour > 0){
 	         				if( storage.LastHour == Time.getHours() ){
-	         					console.log(storage.TimeThisHour);
 	         					if( storage.TimeThisHour > storage.Options.OptionMaxPerHour){
 	         						chrome.tabs.update(tabId, {url:"timeout.html"});
 	         						chrome.alarms.clearAll();
 	         					}	
 	         				}		
 	         			}
+	         			// If OptionMaxPerDay is enabled
+	         			if( storage.Options.OptionMaxPerDay > 0){
+	         				if( storage.LastDay == Time.getDate() ){
+	         					if( storage.TimeThisDay > storage.Options.OptionMaxPerDay*60){
+	         						chrome.tabs.update(tabId, {url:"timeout.html"});
+	         						chrome.alarms.clearAll();
+	         					}	
+	         				}
+	         			}
+	         			
     	    		}
 		         }// ... else disable Force Stop by default
 	  		}
@@ -160,6 +180,16 @@ function watcherTimer(alarm) {
     	}else{
     		chrome.storage.local.set({ TimeThisHour: 5}, function(){});
     	}
+    	if(storage.hasOwnProperty("TimeThisDay")){
+    		if( storage.LastDay == Time.getDate() ){
+    			chrome.storage.local.set({ TimeThisDay: storage.TimeThisDay+5}, function(){});
+    		}else{
+    			chrome.storage.local.set({ TimeThisDay: 0}, function(){});
+    			chrome.storage.local.set({ LastDay: Time.getDate()},function(){});
+    		}
+    	}else{
+    		chrome.storage.local.set({ TimeThisDay: 5}, function(){});
+    	}
 
          
          // If OptionNtf is set...
@@ -201,6 +231,14 @@ function watcherTimer(alarm) {
 	         			chrome.tabs.update(storage.TabId, {url:"timeout.html"});
 	         			chrome.alarms.clearAll();
 	         		}			
+	         	}
+	         	
+	         	// If OptionMaxPerDay is enabled
+	         	if( storage.Options.OptionMaxPerDay > 0){
+	         		if( storage.TimeThisDay > storage.Options.OptionMaxPerDay*60){
+	         			chrome.tabs.update(storage.TabId, {url:"timeout.html"});
+	         			chrome.alarms.clearAll();
+	         		}
 	         	}
 	         	
     	    }
