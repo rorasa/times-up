@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Facebook Watcher",
+  "name": "Facebook Timer",
   "version": "0.4",
   "description": "Stop you from spending too much time on Facebook!",
   "background": { 
@@ -11,7 +11,7 @@
   "page_action" :
   {
     "default_icon" : "icon-19.png",
-    "default_title" : "Facebook Watcher",
+    "default_title" : "Facebook Timer",
     "default_popup": "popup.html"
   },
   "permissions" : [
