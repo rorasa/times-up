@@ -1,14 +1,17 @@
+// Copyright (c) 2013 White Rose Innovation. All rights reserved.
+// Facebook Timer option.js
+// Last modified: July 2013 by Wattanit Hotrakool
 
-// jQuery scripts
+//======================== Main function ===========================================
 $(document).ready(function(){
 
-	//Initialiser
+	//-------------------- Initialiser ---------------------------------------------
 	$("#forceStopOptions").hide();
 	$("#notificationOptions").hide();
 	
 	restore_options();
   	
-  	// Event listeners
+  	//-------------------- Event listeners -----------------------------------------
   	$("#EnableNotification").change(function(){
   		save_options();
   		if( $("#EnableNotification").prop('checked') ){
@@ -91,9 +94,11 @@ $(document).ready(function(){
   	});
   	
 });
+//========================END: Main function =======================================
 
-// save option to local storage
+//======================== save_options ============================================
 function save_options() {
+// save option to local storage
 
 	// enable notification (boolean)
 	var optionNtf = $('#EnableNotification').prop('checked');
@@ -148,10 +153,12 @@ function save_options() {
 		OptionFSWarning: optionFSWarning
 	};
 	chrome.storage.local.set({ Options: options}, function() {});//$('#console').text("options saved");	
-}
+};
+//========================END: save_options ========================================
 
-// restore previous set options from local storage
+//======================== restore_options =========================================
 function restore_options() {
+// restore previous set options from local storage
 	
 	chrome.storage.local.get({
        'Options': {} },
@@ -264,13 +271,13 @@ function restore_options() {
          	$('#EnableForceStopWarning').prop("checked", false);
          }
          
-       });
-       
-}
+       });       
+};
+//========================END: restore_options =====================================
 
-// reset all local storage content
+//======================== clear_data ==============================================
 function clear_data(){
-
+// reset all local storage content
 	var confirm = window.confirm("Your entire usage records and all setting will be reset.\n Are you sure about this?");
 	if (confirm){
 		chrome.storage.local.clear(function(){
@@ -278,3 +285,4 @@ function clear_data(){
 			});
 	}	
 }
+//========================END: clear_data ==========================================

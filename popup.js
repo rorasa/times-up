@@ -1,3 +1,6 @@
+// Copyright (c) 2013 White Rose Innovation. All rights reserved.
+// Facebook Timer popup.js
+// Last modified: July 2013 by Wattanit Hotrakool
 
 $(document).ready(function(){
     var Time = new Date();

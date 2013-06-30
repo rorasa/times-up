@@ -1,61 +1,62 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// Copyright (c) 2013 White Rose Innovation. All rights reserved.
+// Facebook Timer background.js
+// Last modified: July 2013 by Wattanit Hotrakool
 
-// Called when the url of a tab changes.
+
+//======================== checkForValidUrl ========================================
 function checkForValidUrl(tabId, changeInfo, tab) {
+// Called when the url of a tab changes.
 
-  console.log("New tab");
-  // check if tab is already registered
+// check if tab is already registered
   chrome.storage.local.get(
   	null,
   	function(storage) {
-  		 	
+
+//------------------------ Newly opened tap ----------------------------------------  		 	
   		if (storage.TabId != tabId){
   			// If the url contains 'facebook' is found :
   			if (tab.url.indexOf('www.facebook.com') > -1) {
+  				
   				// ... show the page action.
     			chrome.pageAction.show(tabId);
     
+    	//---------------- Initialiser ---------------------------------------------
     			// ... and record the opening time to local storage
     			var Time = new Date();
     			chrome.storage.local.set({ TabId: tabId}, function() {});
     			chrome.storage.local.set({ SessionStartTime: Time.getTime()}, function() {});
     			chrome.storage.local.set({ SessionUsageTime: 0}, function() {});
     			chrome.storage.local.set({ AlarmFired: 0}, function() {});
-    			//chrome.storage.local.set({ InitFlag: true}, function() {});
-    			console.log("tabId = "+tabId);
     			
-    			// ... and increase the number of time opening a facebook
+    			// ... and record the number of time opening facebook and last accessed hour
     			if(storage.hasOwnProperty("OpenThisHour")){
-    				if( storage.LastHour == Time.getHours() ){
+    				if( storage.LastHour == Time.getHours() ){ // same hour
     					chrome.storage.local.set({ OpenThisHour: storage.OpenThisHour+1}, function(){});
-    				}else{
+    				}else{ // new hour
     					chrome.storage.local.set({ OpenThisHour: 1}, function(){});
     					chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
     				}
-    			}else{
+    			}else{ // Initialise
     				chrome.storage.local.set({ OpenThisHour: 1}, function(){});
     				chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
     			}
     			
+    			// ... and record the last accessed date
     			if(storage.hasOwnProperty("LastDay")){
-    				if( storage.LastDay != Time.getDate()){
+    				if( storage.LastDay != Time.getDate()){ // new day
     					chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
     					chrome.storage.local.set({ TimeThisDay: 0}, function(){});
     				}    				
-    			}else{
+    			}else{ // Initialise
     				chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
     			}
     			
-    
-				// ... and create an alarm to check the time in future.
+				// ... and create an alarm to check time in future.
 				chrome.alarms.clearAll();
-				//chrome.alarms.create("WatcherTimer",{ periodInMinutes: 0.1 });		// Development rate
-				chrome.alarms.create("WatcherTimer",{ periodInMinutes: 5 });		// Deployment rate
+				chrome.alarms.create("WatcherTimer",{ periodInMinutes: 5 });
 				
-				
-				// Check usage limit and Force Stop
+		//---------------- Condition check to immediately stop Facebook to load ----
+				// Check if Force Stop is enabled
   				if(storage.Options.hasOwnProperty("OptionFS")){
          			if(storage.Options.OptionFS){
          			
@@ -88,17 +89,21 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	         			}
 	         			
     	    		}
-		         }// ... else disable Force Stop by default
+		        }// ... else disable Force Stop by default
   			}
+ //----------------------- Already registered tab ----------------------------------
   		}else{
-	  		console.log("Already registered");
+  			// If the url contains 'facebook' is found :
 	  		if (tab.url.indexOf('www.facebook.com') > -1) {
+	  			// ... show the page action.
 	  			chrome.pageAction.show(tabId);
 	  			
+	  	//---------------- Condition check to immediately stop Facebook to load ----
 	  			var Time = new Date();
-	  			// Check usage limit and Force Stop
+	  			// Check if Force Stop is enabled
   				if(storage.Options.hasOwnProperty("OptionFS")){
          			if(storage.Options.OptionFS){
+	         			
 	         			// If OptionMaxOpen is enabled
 	         			if( storage.Options.OptionMaxOpen > 0){	         				
 	         				if( storage.LastHour == Time.getHours() ){
@@ -128,76 +133,74 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	         			}
 	         			
     	    		}
-		         }// ... else disable Force Stop by default
+		        }// ... else disable Force Stop by default
 	  		}
   		}
   	}
   );
-  
-  chrome.alarms.getAll(function(alarmsArr){
-  	console.log("Number of alarms: "+alarmsArr.length);
-  });
 
 };
+//========================END: checkForValidUrl ====================================
 
+//======================== tabClose ================================================
 function tabClose(tabId, removeInfo){
-	console.log("Tab closed: "+tabId);
-	//chrome.alarms.clearAll();
+// Called when a tab is closed.
 	chrome.storage.local.get({
 		'TabId':{} },
 		function(storage) {
-			//console.log("TabId = "+storage.TabId);
+			// Check if the closing tab is Facebook tab
 			if( storage.TabId == tabId){
-				//console.log("clear alarms here");
 				chrome.alarms.clearAll();
 			}
 		});
 };
+//========================END: tabClose ============================================
 
-// main alarm for timer check
+//======================== watcherTimer ============================================
 function watcherTimer(alarm) {
-	console.log("alarm fired: watcherTimer");
+// Event timer fired every 5 minutes for conditions check and update
 	chrome.storage.local.get(
 	   null,
        function(storage) {
+       
+       //----------------- Update variables ----------------------------------------
          var alarmFired = storage.AlarmFired;
          chrome.storage.local.set({ AlarmFired: alarmFired+1}, function() {});
          
+    	 // record session usage time (in seconds)
          var Time = new Date();
          var currentTime = Date.now();
          var currentSession = (currentTime-storage.SessionStartTime)/1000;
-         //var usageTime = storage.SessionUsageTime + 6;  	// Development rate
-         var usageTime = storage.SessionUsageTime + 300;  	// Deployment rate
+         var usageTime = storage.SessionUsageTime + 300;
 		 chrome.storage.local.set({ SessionUsageTime: usageTime}, function() {});
 
-		// record time spent on facebook
-    	if(storage.hasOwnProperty("TimeThisHour")){
-    		if( storage.LastHour == Time.getHours() ){
+		 // record time spent on facebook in current hour (in minutes)
+    	 if(storage.hasOwnProperty("TimeThisHour")){
+    		if( storage.LastHour == Time.getHours() ){ // same hour
     			chrome.storage.local.set({ TimeThisHour: storage.TimeThisHour+5}, function(){});
-    		}else{
+    		}else{ // new hour
     			chrome.storage.local.set({ TimeThisHour: 0}, function(){});
     			chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
     		}
-    	}else{
+    	 }else{ // Initialise
     		chrome.storage.local.set({ TimeThisHour: 5}, function(){});
-    	}
-    	if(storage.hasOwnProperty("TimeThisDay")){
-    		if( storage.LastDay == Time.getDate() ){
+    	 }
+    	 
+    	 // record time spent on facebook in current day (in minutes)
+    	 if(storage.hasOwnProperty("TimeThisDay")){
+    		if( storage.LastDay == Time.getDate() ){ // same day
     			chrome.storage.local.set({ TimeThisDay: storage.TimeThisDay+5}, function(){});
-    		}else{
+    		}else{ // new day
     			chrome.storage.local.set({ TimeThisDay: 0}, function(){});
     			chrome.storage.local.set({ LastDay: Time.getDate()},function(){});
     		}
-    	}else{
+    	 }else{ // Initialise
     		chrome.storage.local.set({ TimeThisDay: 5}, function(){});
-    	}
+    	 }
 
-         
+	   //----------------- Display notification ------------------------------------         
          // If OptionNtf is set...
          if(!storage.Options.hasOwnProperty("OptionNtf" ) || storage.Options.OptionNtf){
-         	
-	         console.log("Notiication enabled");
-	         	
 	         // If notification time is set ...
 	         if(storage.Options.hasOwnProperty("OptionNtfTime")){
 	         	if( usageTime >= storage.Options.OptionNtfTime * 60){
@@ -209,14 +212,13 @@ function watcherTimer(alarm) {
 	         		alert("You have spent you time on Facebook for too long!");
 	         		chrome.storage.local.set({ SessionUsageTime: 0}, function() {});
 	         	}
-	         }
-    	     	
+	         }    	     	
          }
          
+       //----------------- Condition check for Force Stop --------------------------
          // If OptionFS is set...
          if(storage.Options.hasOwnProperty("OptionFS")){
          	if(storage.Options.OptionFS){
-	         	console.log("Force Stop enabled");
 	         	
 	         	// If OptionMaxCon is enabled
 	         	if( storage.Options.OptionMaxCon > 4){
@@ -245,13 +247,12 @@ function watcherTimer(alarm) {
     	    }
          }// ... else disable Force Stop by default
          
-         
        });
-       
-    //chrome.storage.local.set({ InitFlag: false}, function() {});
 };
+//========================END: watcherTimer ========================================
 
-// Listen for any changes to the URL of any tab.
+//======================== Event listeners =========================================
 chrome.tabs.onUpdated.addListener(checkForValidUrl);
 chrome.tabs.onRemoved.addListener(tabClose);
 chrome.alarms.onAlarm.addListener(watcherTimer);
+//========================END: Event listeners =====================================
