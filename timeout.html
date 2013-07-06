@@ -2,17 +2,62 @@
 <html>
 <head>
 <script src="jquery-1.10.1.min.js"></script>
+<script src="timeout.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css" />
+<style>
+body{
+	height: 100%;
+	background-image:url('warning.png');
+	background-repeat:no-repeat;
+	background-position:right bottom;	
+}
+</style>
+<title>Time's Up!</title>
 </head>
 
 <body>
 <div class="header_line"></div>
 
 <div class="timeout_body"> 
-	 <h1>You have spent you time on Facebook for too long!</h1> 
+	 <h1>Time's up!</h1> 
+	 <h2>You have spent you time on Facebook for too long!</h2>
 	 <p> Why not take a break and do something good? </p> 
-	 
-	 <a href="#" id="goback" onclick="window.history.go(-2); return false;">Please, just a little bit more.</a>
+	 <br>
+	 <div class="timeout_countdown">
+	 	<h3>You can use Facebook in</h3>
+	 	<h2><span id="countdown"></span></h2>
+	 </div>
+	 	 
+	 <div class="timeout_report">
+	 <h3> Your Facebook usage is </h3>
+	 <div id="MaxConMeter" style="display: none; margin-top: 15px;">
+	 	<div class="meter" >
+		<span style="width: 25%"></span>
+	    </div>
+		<span id="ConMeterText">0 minutes from 0 minutes</span>.
+	 </div>
+
+	 <div id="MaxPerDayMeter" style="display: none; margin-top: 15px;">
+	 	<div class="meter">
+	 	<span style="width: 25%"></span>
+	 	</div>
+	 	<span id="PerDayMeterText">0 hours from 0 hours</span>.
+	 </div>
+
+	 <div id="MaxPerHourMeter" style="display: none; margin-top: 15px;">
+	 	<div class="meter">
+	 	<span style="width: 25%"></span>
+	 	</div>
+	 	<span id="PerHourMeterText">0 minutes from 0 minutes</span>.
+	 </div>
+
+	 <div id="MaxOpenMeter" style="display: none; margin-top: 15px;">
+	 	<div class="meter">
+	 	<span style="width: 25%" id="hotbar"></span>
+	 	</div>
+	 	<span id="OpenMeterText">times from 0 times</span>.
+	 </div>
+	 </div>
 </div>
 </body>
 

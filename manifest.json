@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Facebook Timer",
-  "version": "0.4",
+  "name": "Time's Up!",
+  "version": "0.5",
   "description": "Stop you from spending too much time on Facebook!",
   "background": { 
      "scripts": ["background.js"], 
@@ -11,14 +11,15 @@
   "page_action" :
   {
     "default_icon" : "icon-19.png",
-    "default_title" : "Facebook Timer",
+    "default_title" : "Time's Up!",
     "default_popup": "popup.html"
   },
   "permissions" : [
     "tabs",
     "webNavigation",
     "storage",
-    "alarms"
+    "alarms",
+    "notifications"
   ],
   "icons" : {
     "48" : "icon-48.png",

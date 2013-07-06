@@ -1,5 +1,5 @@
 // Copyright (c) 2013 White Rose Innovation. All rights reserved.
-// Facebook Timer option.js
+// Time's Up! option.js
 // Last modified: July 2013 by Wattanit Hotrakool
 
 //======================== Main function ===========================================
@@ -16,6 +16,11 @@ $(document).ready(function(){
   		save_options();
   		if( $("#EnableNotification").prop('checked') ){
   			$("#notificationOptions").show();
+  			if (window.webkitNotifications) {
+  				if (window.webkitNotifications.checkPermission() != 0){
+  					window.webkitNotifications.requestPermission();
+  				}
+  			}
   		}else{
   			$("#notificationOptions").hide();
   		}
