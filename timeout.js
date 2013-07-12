@@ -44,6 +44,8 @@ $(document).ready(function(){
          		if(percent == 100){
          			$("#MaxOpenMeter div span").css("background-color","#E01B5D");
          			$("#MaxOpenMeter div span").css("background-image","-webkit-gradient(linear, left bottom, left top, color-stop(0, #C40847), color-stop(1, #E01B5D))");
+         			
+         			$("#countdown").text("Immediately");
          		}
          	}
          	

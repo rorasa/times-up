@@ -10,7 +10,10 @@
   "options_page": "options.html",
   "page_action" :
   {
-    "default_icon" : "icon-19.png",
+    "default_icon" : {
+    	"19" : "icon-19.png",
+    	"38" : "icon-38.png"
+    },
     "default_title" : "Time's Up!",
     "default_popup": "popup.html"
   },
@@ -22,6 +25,8 @@
     "notifications"
   ],
   "icons" : {
+    "16" : "icon-16.png",
+    "32" : "icon-32.png",
     "48" : "icon-48.png",
     "128" : "icon-128.png"
   }

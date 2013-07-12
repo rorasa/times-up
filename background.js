@@ -206,7 +206,7 @@ function watcherTimer(alarm) {
 	         	if( usageTime >= storage.Options.OptionNtfTime * 60){
 	         		if (window.webkitNotifications && (window.webkitNotifications.checkPermission() == 0)) {
 	         			var notification = window.webkitNotifications.createNotification(
-							"icon-19.png", "Your Facebook time's up!", 
+							"icon-32.png", "Your Facebook time's up!", 
 							"You have spent you time on Facebook for another "+ storage.Options.OptionNtfTime +" minutes");
 						notification.show();
 	         		}else{
@@ -223,7 +223,7 @@ function watcherTimer(alarm) {
  	         	if( usageTime >= 30 * 60){
 	         		if (window.webkitNotifications && (window.webkitNotifications.checkPermission() == 0)) {
 	         			var notification = window.webkitNotifications.createNotification(
-							"icon-19.png", "Your Facebook time's up!", 
+							"icon-32.png", "Your Facebook time's up!", 
 							"You have spent you time on Facebook for another "+ storage.Options.OptionNtfTime +" minutes");
 						notification.show();
 	         		}else{
