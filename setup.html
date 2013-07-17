@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="jquery-1.10.1.min.js"></script>
+<script src="setup.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Welcome to Time's Up!</title>
+</head>
+
+<body>
+<div class="header_line"></div>
+
+<div class="header">
+	<img src="logo.png" width="200" height="42"/>
+</div>
+
+<div class="option_body"> 
+	<h1> Welcome to Time's Up! </h1>
+	<hr>
+	<span class="option_section_bullet"></span>
+	<span class="option_section_head"> <strong>Introduction</strong> </span>
+	<div class="option_section">
+	So you've decided to start manage your precious time you spend on Facebook.<br>
+	If you would spend a few seconds to tell us what your plan is, 
+	we promise we'll do our best to help you.<br>
+	<button id="introButton">Ok </button>
+	</div>
+	
+	<div id="notification">
+	<span class="option_section_bullet"></span>
+	<span class="option_section_head"> <strong>Notification</strong> </span>
+	<div class="option_section">
+	<form>
+		First of all, should we gently tell you that you are on Facebook for too long?<br>
+		<input type="radio" id="EnableNotification" name="notification" value="enable"> 
+			Yes, enable notification please.<br>
+		<input type="radio" id="DisableNotification" name="notification" > 
+			No, I'm fine by myself.<br><br>
+			
+		<div id="notificationOptions">
+		If so, how often should we tell you?
+		<select id="NtfTime">
+			<option id="Ntf5mins"  value="5mins">5 minutes</option>
+			<option id="Ntf10mins" value="10mins">10 minutes</option>
+			<option id="Ntf20mins" value="20mins">20 minutes</option>
+			<option id="Ntf30mins" value="30mins" selected>30 minutes</option>
+			<option id="Ntf45mins" value="45mins">45 minutes</option>
+			<option id="Ntf1hours" value="1hours">1 hours</option>
+			<option id="Ntf2hours" value="2hours">2 hours</option>
+  			<option id="Ntf3hours" value="3hours">3 hours</option>
+		</select>
+		</div>
+	</form>
+	</div>
+	</div>
+	
+	<div id="forcestop">
+	<span class="option_section_bullet"></span>
+	<span class="option_section_head"> <strong>Force Stop</strong> </span>
+	<div class="option_section">
+	<form>
+		We introduce Force Stop. <br>
+		If enable, Force Stop will forcefully keep you away from Facebook by closing it down 
+		when a limit (or limits) you set on your own is reached.
+		Should be perform Force Stop?<br>
+		<input type="radio" id="EnableForceStop" name="forcestop" value="enable"> 
+			Yes, please do Force Stop.<br>
+		<input type="radio" id="DisableForceStop" name="forcestop"> 
+			No, I prefer a milder way.<br><br>
+		
+		<div id="forceStopOptions">
+		If so, please set your limit as you see fit:<br>
+ 		
+ 		<b>Max continuous period:</b><sup id="MaxConAsk">?</sup><br>
+ 		<input type="range" class="option_range" id="MaxCon" min="4" max="300"> <span id="MaxConDisplay"></span><br>
+ 		<div class="option_helpbox" id="MaxConHelp">
+ 			Design how long you can leave Facebook open continuously.
+ 		</div>
+ 			 		
+ 		<b>Max hours per day </b><sup id="MaxPerDayAsk">?</sup><br>
+ 		<input type="range" class="option_range" id="MaxPerDay" min="0" max="24"> <span id="MaxPerDayDisplay"></span><br>
+ 		<div class="option_helpbox" id="MaxPerDayHelp">
+			Design how many hours you can use Facebook in one day.	
+ 		</div>
+ 		
+ 		<b>Max minutes per hour</b><sup id="MaxPerHourAsk">?</sup><br>
+		<input type="range" class="option_range" id="MaxPerHour" min="0" max="60"> <span id="MaxPerHourDisplay"></span><br>
+		<div class="option_helpbox" id="MaxPerHourHelp">
+ 			Design how many minutes you can use Facebook in one hour.
+ 		</div>
+ 		
+ 		<b>Max opening per hour</b><sup id="MaxOpenAsk">?</sup><br>
+ 		<input type="range" class="option_range" id="MaxOpen" min="0" max="60"> <span id="MaxOpenDisplay"></span><br>
+ 		<div class="option_helpbox" id="MaxOpenHelp">
+ 			Design how many times you can pay a visit to Facebook in one hour.
+ 		</div>
+ 		 		
+ 		<!--<p>
+		<input type="checkbox" id="EnableForceStopWarning" value="enable" disabled> <b>Warn before force stop.</b>
+		</p>-->
+ 		</div>
+	</form>
+	</div>
+	</div>
+	
+	<div id="done">
+	<span class="option_section_bullet"></span>
+	<span class="option_section_head"> <strong>Done!</strong> </span>
+	<div class="option_section">
+		You've finished setting up Time's Up!<br>
+		Now you can return to your work, 
+		and stop worrying that your precious time will disappear magically when using Facebook.
+		<br><br>
+		You might want to try it out now. Why not try visit our 
+		<a href="http://www.facebook.com/TimesUpTimeLimiter">Facebook page</a>?
+		<br><br>
+		Thank you for choosing Time's Up!
+	</div>
+	</div>
+</div>
+
+<div class="footer">
+	<br>
+	<span style="margin-right: 30px;">© Copyright 2013 Time's Up! Development Team</span>
+</div>
+
+</body>
+</html>

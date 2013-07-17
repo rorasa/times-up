@@ -94,10 +94,6 @@ $(document).ready(function(){
   	$("#EnableForceStopWarning").change(save_options);
   	$("#ResetButton").click(clear_data);
   	
-  	$("#testRange").change(function(){
-  		$("#testDisplay").text($("#testRange").val());
-  	});
-  	
 });
 //========================END: Main function =======================================
 

@@ -12,49 +12,70 @@ function checkForValidUrl(tabId, changeInfo, tab) {
   	null,
   	function(storage) {
 
-//------------------------ Newly opened tap ----------------------------------------  		 	
-  		if (storage.TabId != tabId){
+//------------------------ Newly opened tap ----------------------------------------  
+		//console.log(storage.hasOwnProperty("TabId"));
+		//console.log(storage.TabId);
+		//console.log(typeof storage.TabId);
+		if(storage.hasOwnProperty("TabId")){
+			if(typeof storage.TabId === "undefined"){
+    			var TabIdVector = new Array();
+				chrome.storage.local.set({ TabId: TabIdVector}, function() {});
+    		}
+		}else{
+			var TabIdVector = new Array();
+			chrome.storage.local.set({ TabId: TabIdVector}, function() {});
+		}
+		
+  		if (storage.TabId.indexOf(tabId)<0){
   			// If the url contains 'facebook' is found :
   			if (tab.url.indexOf('www.facebook.com') > -1) {
   				
   				// ... show the page action.
     			chrome.pageAction.show(tabId);
-    
+    			
+    			// Check if this is the only facebook tab
+    			if(storage.TabId.length > 0){
+    				var TabIdVector = storage.TabId;
+    				TabIdVector.push(tabId);
+    				chrome.storage.local.set({ TabId: TabIdVector}, function() {});
+    			}else{    
     	//---------------- Initialiser ---------------------------------------------
-    			// ... and record the opening time to local storage
-    			var Time = new Date();
-    			chrome.storage.local.set({ TabId: tabId}, function() {});
-    			chrome.storage.local.set({ SessionStartTime: Time.getTime()}, function() {});
-    			chrome.storage.local.set({ SessionUsageTime: 0}, function() {});
-    			chrome.storage.local.set({ AlarmFired: 0}, function() {});
-    			
-    			// ... and record the number of time opening facebook and last accessed hour
-    			if(storage.hasOwnProperty("OpenThisHour")){
-    				if( storage.LastHour == Time.getHours() ){ // same hour
-    					chrome.storage.local.set({ OpenThisHour: storage.OpenThisHour+1}, function(){});
-    				}else{ // new hour
-    					chrome.storage.local.set({ OpenThisHour: 1}, function(){});
-    					chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
-    				}
-    			}else{ // Initialise
-    				chrome.storage.local.set({ OpenThisHour: 1}, function(){});
-    				chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
-    			}
-    			
-    			// ... and record the last accessed date
-    			if(storage.hasOwnProperty("LastDay")){
-    				if( storage.LastDay != Time.getDate()){ // new day
-    					chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
-    					chrome.storage.local.set({ TimeThisDay: 0}, function(){});
-    				}    				
-    			}else{ // Initialise
-    				chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
-    			}
-    			
-				// ... and create an alarm to check time in future.
-				chrome.alarms.clearAll();
-				chrome.alarms.create("WatcherTimer",{ periodInMinutes: 1 });
+					// ... and record the opening time to local storage
+					var Time = new Date();
+					var TabIdVector = storage.TabId;
+    				TabIdVector.push(tabId);
+					chrome.storage.local.set({ TabId: TabIdVector}, function() {});
+					chrome.storage.local.set({ SessionStartTime: Time.getTime()}, function() {});
+					chrome.storage.local.set({ SessionUsageTime: 0}, function() {});
+					chrome.storage.local.set({ AlarmFired: 0}, function() {});
 				
+					// ... and record the number of time opening facebook and last accessed hour
+					if(storage.hasOwnProperty("OpenThisHour")){
+						if( storage.LastHour == Time.getHours() ){ // same hour
+							chrome.storage.local.set({ OpenThisHour: storage.OpenThisHour+1}, function(){});
+						}else{ // new hour
+							chrome.storage.local.set({ OpenThisHour: 1}, function(){});
+							chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
+						}
+					}else{ // Initialise
+						chrome.storage.local.set({ OpenThisHour: 1}, function(){});
+						chrome.storage.local.set({ LastHour: Time.getHours()},function(){});
+					}
+				
+					// ... and record the last accessed date
+					if(storage.hasOwnProperty("LastDay")){
+						if( storage.LastDay != Time.getDate()){ // new day
+							chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
+							chrome.storage.local.set({ TimeThisDay: 0}, function(){});
+						}    				
+					}else{ // Initialise
+						chrome.storage.local.set({ LastDay: Time.getDate()}, function(){});
+					}
+				
+					// ... and create an alarm to check time in future.
+					chrome.alarms.clearAll();
+					chrome.alarms.create("WatcherTimer",{ periodInMinutes: 1 });
+				}
 		//---------------- Condition check to immediately stop Facebook to load ----
 				// Check if Force Stop is enabled
   				if(storage.Options.hasOwnProperty("OptionFS")){
@@ -134,6 +155,8 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	         			
     	    		}
 		        }// ... else disable Force Stop by default
+	  		}else{	// if tab is no longer on facebook
+	  			tabClose(tabId,{});
 	  		}
   		}
   	}
@@ -149,7 +172,10 @@ function tabClose(tabId, removeInfo){
 		'TabId':{} },
 		function(storage) {
 			// Check if the closing tab is Facebook tab
-			if( storage.TabId == tabId){
+			if( storage.TabId.indexOf(tabId)>=0){
+				var TabIdVector = storage.TabId;
+    			TabIdVector.splice(storage.TabId.indexOf(tabId),1);
+    			chrome.storage.local.set({ TabId: TabIdVector}, function() {});
 				chrome.alarms.clearAll();
 			}
 		});
@@ -280,3 +306,14 @@ chrome.tabs.onUpdated.addListener(checkForValidUrl);
 chrome.tabs.onRemoved.addListener(tabClose);
 chrome.alarms.onAlarm.addListener(watcherTimer);
 //========================END: Event listeners =====================================
+
+//======================== First setup after install ===============================
+chrome.runtime.onInstalled.addListener(function(details){
+	if(details.reason == "install"){ // Freshly install
+		chrome.tabs.create({url: "setup.html"});
+	}else if(details.reason == "update"){ // Updated a new version
+		//chrome.tabs.create({url: "setup.html"});
+	}
+	
+});
+//========================END: First setup after install ===========================

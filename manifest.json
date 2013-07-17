@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Time's Up!",
-  "version": "0.5",
-  "description": "Stop you from spending too much time on Facebook!",
+  "version": "0.6",
+  "description": "Help you to stop spending too much time on Facebook!",
   "background": { 
      "scripts": ["background.js"], 
      "persistent": true
