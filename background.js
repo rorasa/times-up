@@ -87,7 +87,9 @@ chrome.storage.local.get(
   			//---------------- Create alarm timer ----------------------------------		
 				chrome.alarms.clearAll();
 				chrome.alarms.create("WatcherTimer",{ periodInMinutes: 1 });
-				
+				chrome.alarms.getAll(function(almList){
+					console.log("# of alarms: "+almList.length);
+				});
   			}
   		}	
 //------------------------ Already opened tab --------------------------------------
@@ -142,12 +144,6 @@ chrome.storage.local.get(
 		}		
 });
 
-/*chrome.storage.local.get({
-	'TabId':{} },
-	function(storage) {
-		console.log(typeof storage.TabId);
-		console.log(storage.TabId.length);
-	});*/
 };
 
 
@@ -237,6 +233,7 @@ function watcherTimer(alarm) {
 	         				}
 	         				alert("You have spent you time on Facebook for another "+ storage.Options.OptionNtfTime +" minutes");
          				}
+         				chrome.storage.local.set({ SessionUsageTime: 0}, function() {});
          			}
          		}else{ // ... else default notification time is 30 minutes
          			if( usageTime >= 30 * 60){
