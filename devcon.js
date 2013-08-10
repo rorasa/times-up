@@ -74,6 +74,9 @@ function record(){
 				}
 				chrome.storage.local.set({Options: options}, function(){});
 			}else{
+				if(key=="TabId"){
+					continue;
+				}
 				var data = {};
 				data[key] = parseInt($("#"+key).val());
 				chrome.storage.local.set(data, function(){});

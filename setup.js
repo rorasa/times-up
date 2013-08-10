@@ -182,5 +182,8 @@ function save_options() {
 		OptionFSWarning: optionFSWarning
 	};
 	chrome.storage.local.set({ Options: options}, function() {});//$('#console').text("options saved");	
+	
+	chrome.storage.local.set({ TimeThisHour: 0}, function(){});
+	chrome.storage.local.set({ TimeThisDay: 0}, function(){});
 };
 //========================END: save_options ========================================
