@@ -41,7 +41,7 @@ $(document).ready(function(){
          		var percent = Math.floor((currentSession/(storage.Options.OptionMaxCon*60))*100);
          		if(percent > 100){ percent = 100; }
          		$("#MaxConMeter div span").css("width",percent+"%");
-         		if(percent == 100){
+         		if(percent >= 100){
          			$("#MaxOpenMeter div span").css("background-color","#E01B5D");
          			$("#MaxOpenMeter div span").css("background-image","-webkit-gradient(linear, left bottom, left top, color-stop(0, #C40847), color-stop(1, #E01B5D))");
          			
@@ -61,7 +61,7 @@ $(document).ready(function(){
          		var percent = Math.round((storage.TimeThisDay/(storage.Options.OptionMaxPerDay*60))*100);
          		if(percent > 100){ percent = 100; }
          		$("#MaxPerDayMeter div span").css("width",percent+"%");
-         		if(percent == 100){
+         		if(percent >= 100){
          			$("#MaxOpenMeter div span").css("background-color","#E01B5D");
          			$("#MaxOpenMeter div span").css("background-image","-webkit-gradient(linear, left bottom, left top, color-stop(0, #C40847), color-stop(1, #E01B5D))");
          			
@@ -76,7 +76,7 @@ $(document).ready(function(){
          		var percent = Math.round((storage.TimeThisHour/storage.Options.OptionMaxPerHour)*100);
          		if(percent > 100){ percent = 100; }
          		$("#MaxPerHourMeter div span").css("width",percent+"%");
-         		if(percent == 100){
+         		if(percent >= 100){
          			$("#MaxOpenMeter div span").css("background-color","#E01B5D");
          			$("#MaxOpenMeter div span").css("background-image","-webkit-gradient(linear, left bottom, left top, color-stop(0, #C40847), color-stop(1, #E01B5D))");
          			
@@ -91,7 +91,7 @@ $(document).ready(function(){
          		var percent = Math.round((storage.OpenThisHour/storage.Options.OptionMaxOpen)*100);
          		if(percent > 100){ percent = 100; }
          		$("#MaxOpenMeter div span").css("width",percent+"%");
-         		if(percent == 100){
+         		if(percent >= 100){
          			$("#MaxOpenMeter div span").css("background-color","#E01B5D");
          			$("#MaxOpenMeter div span").css("background-image","-webkit-gradient(linear, left bottom, left top, color-stop(0, #C40847), color-stop(1, #E01B5D))");
          			
