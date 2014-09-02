@@ -1,4 +1,4 @@
-TIME'S UP!
+#TIME'S UP!#
 
 A browser extension to manage time spent on the internet.
 Originally named Facebook blocker, it was designed as an extension for Google Chrome 
@@ -13,39 +13,45 @@ Features:
 - ForceStop forcefully block users from Facebook if the time limit is reached.
 
 Time's Up! can be found on Chrome Web Store at http://goo.gl/qM8U6j
+
 Time's Up! Facebook: http://www.facebook.com/TimesUpTimeLimiter
 
 ==================================================================================================================
 
-VERSION HISTORY
+##VERSION HISTORY##
 
-VERSION 1.0.1
+*VERSION 1.0.1*
 Bugs fixed
 
-VERSION 1.0
+*VERSION 1.0*
 Public release
 
 ==================================================================================================================
 
-DEVELOPMENT PLAN 
+##DEVELOPMENT PLAN ##
 for version 2.0
 
-Stage 1 - Backend
-[ ] Multiple website detection module
-[ ] Implement new data model using Backbone.js
+*Stage 1* - **Backend**
 
-Stage 2 - Frontend
-[ ] Implement all new interface
-[ ] New notification module
-[ ] New ForceStop module
-[ ] Advertisment module
+[ ] Multiple website detection module  
+[ ] Implement new data model using Backbone.js  
 
-Stage 3 - Statistic module
-[ ] Statistic module - backend
-[ ] Statistic module - frontend
+*Stage 2* - **Frontend**
 
-Stage 4 - Sync
-[ ] Sync module
+[ ] Implement all new interface  
+[ ] New notification module  
+[ ] New ForceStop module  
+[ ] Advertisment module  
 
-Stage 5 - Other browsers support
-[ ] Support for Firefox, Safari, IE, and Opera
+*Stage 3* - **Statistic module**
+
+[ ] Statistic module - backend  
+[ ] Statistic module - frontend  
+
+*Stage 4* - **Sync**
+
+[ ] Sync module  
+
+*Stage 5* - **Other browsers support**
+
+[ ] Support for Firefox, Safari, IE, and Opera  
