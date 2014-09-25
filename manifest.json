@@ -1,10 +1,16 @@
 {
   "manifest_version": 2,
   "name": "Time's Up!",
-  "version": "0.7",
+  "version": "1.1.1.7",
   "description": "Help you to stop spending too much time on Facebook!",
-  "background": { 
-     "scripts": ["background.js"], 
+  "icons" : {
+    "16" : "icon-16.png",
+    "32" : "icon-32.png",
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+    },
+  "background": {
+     "page": "background.html",
      "persistent": true
   },
   "options_page": "options.html",
@@ -23,11 +29,5 @@
     "storage",
     "alarms",
     "notifications"
-  ],
-  "icons" : {
-    "16" : "icon-16.png",
-    "32" : "icon-32.png",
-    "48" : "icon-48.png",
-    "128" : "icon-128.png"
-  }
+  ]
 }
